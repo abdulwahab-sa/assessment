@@ -63,36 +63,30 @@ const routes = [
 	},
 ];
 
-/*
-Write a program to find
-A person wants to ride from locationA to locationC, he wants to know which route he can
-travel(based upon the given routes).
-
-• On which route or routes that person can travel?
-• If there is any route or routes then also find which time the person will be picked up
-and when will he reach the destination(for each route).
-Please make sure that vehicle has enough space to move that person(if there is enough
-capacity in vehicle based upon given information)
-*/
-const reqLocation = 'locationC';
-const routeChecker = () => {
+const findRoute = (start, destination) => {
 	let stopRiders = 0;
-	routes.map((el) => {
-		let { peopleRiding, stops, vehicleCapacity, name } = el;
+	routes.map((route) => {
+		const { name, peopleRiding, stops } = route;
+		stops.filter((stop) => {
+			const { peopleToPick, peopleToDrop } = stop;
 
-		const stop = stops.map((el) => {
-			const { peopleToPick, peopleToDrop, location } = el;
-			if (location === reqLocation) {
-				console.log(true);
-			}
 			const totalRiding = peopleToPick + peopleRiding;
 			currentlyRiding = totalRiding - peopleToDrop + stopRiders;
+
+			for (const [key, value] of Object.entries(stop)) {
+				// checked for stops of all routes which have our destination
+
+				if (value === start) {
+					console.log(`${name} can be used and he will be pickup from ${start} = ${stop.leave}`);
+				} else if (value === destination) {
+					console.log(`arrival at ${destination} = ${stop.arrival}`);
+				}
+			}
 			return currentlyRiding;
 		});
 		stopRiders += currentlyRiding;
-		return stopRiders;
+		console.log(stopRiders);
 	});
-	// Both routes have vehicles with the capacity to take the person to the location-C
 };
 
-routeChecker();
+findRoute('locationA', 'locationC');
